@@ -1,0 +1,82 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8rem 2rem 4rem;
+}
+
+.header {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.statTitle {
+    font-size: 0.9rem;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 0.5rem;
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+}
+
+.chartPlaceholder {
+    height: 100px;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.02) 100%);
+    margin-top: 1rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.chartLine {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 20 L0 10 Q10 15 20 8 T40 10 T60 5 T80 12 L100 5 L100 20 Z" fill="rgba(100, 50, 255, 0.1)"/></svg>');
+    background-size: cover;
+}
+
+.apiKeySection {
+    margin-top: 2rem;
+}
+
+.keyDisplay {
+    font-family: monospace;
+    background: rgba(0, 0, 0, 0.03);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px dashed rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.blurKey {
+    filter: blur(4px);
+    user-select: none;
+    transition: filter 0.2s;
+}
+
+.blurKey:hover {
+    filter: blur(0);
+}

@@ -1,0 +1,68 @@
+/* Global CSS Reset & Variables */
+:root {
+  /* HSL Values for easy opacity manipulation */
+  --background: 0 0% 98%;      /* #FAFAFA */
+  --foreground: 240 10% 3.9%;  /* #09090b */
+  
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+ 
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+ 
+  --primary: 262 83% 58%;      /* Vibrant Purple */
+  --primary-foreground: 210 40% 98%;
+ 
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+ 
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+ 
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+ 
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 262 83% 58%;
+ 
+  --radius: 0.75rem;
+
+  /* Custom "Ethereal" colors */
+  --glass-bg: 0 0% 100%; /* used with opacity */
+  --glass-border: 0 0% 100%;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}

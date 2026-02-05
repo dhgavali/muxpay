@@ -1,0 +1,55 @@
+.base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+    gap: 0.5rem;
+}
+
+.primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(280, 80%, 60%) 100%);
+    color: hsl(var(--primary-foreground));
+    box-shadow: 0 4px 14px 0 rgba(100, 50, 255, 0.39);
+}
+
+.primary:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(100, 50, 255, 0.23);
+}
+
+.secondary {
+    background: rgba(255, 255, 255, 0.5);
+    color: hsl(var(--foreground));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.secondary:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.outline {
+    background: transparent;
+    border: 1px solid hsl(var(--primary));
+    color: hsl(var(--primary));
+}
+
+.outline:hover {
+    background: hsl(var(--primary) / 0.1);
+}
+
+.ghost {
+    background: transparent;
+    color: hsl(var(--foreground));
+}
+
+.ghost:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
