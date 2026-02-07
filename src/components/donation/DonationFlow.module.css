@@ -1,0 +1,220 @@
+.widgetContainer {
+  padding: 1.5rem;
+}
+
+.widgetContainer h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #7b3ff2 0%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.bridgeInfo {
+  background: rgba(123, 63, 242, 0.1);
+  border: 1px solid rgba(123, 63, 242, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.infoItem:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.widgetPlaceholder {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px dashed rgba(123, 63, 242, 0.3);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.widgetPlaceholder p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+}
+
+.small {
+  font-size: 0.85rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-top: 0.5rem !important;
+}
+
+.actionButton {
+  width: 100%;
+}
+
+.sessionContainer {
+  padding: 1.5rem;
+}
+
+.sessionContainer h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #7b3ff2 0%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.balanceDisplay {
+  background: rgba(123, 63, 242, 0.15);
+  border: 1px solid rgba(123, 63, 242, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.balanceLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.balanceAmount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.balanceCurrency {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+}
+
+.tippingSection {
+  margin-bottom: 1.5rem;
+}
+
+.tippingSection h4 {
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.tipButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tipButton {
+  padding: 1rem;
+  background: rgba(123, 63, 242, 0.2);
+  border: 2px solid rgba(123, 63, 242, 0.4);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tipButton:hover {
+  background: rgba(123, 63, 242, 0.4);
+  border-color: rgba(123, 63, 242, 0.6);
+  transform: translateY(-2px);
+}
+
+.tipButton:active {
+  transform: translateY(0);
+}
+
+.tipButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.customTipInput {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(123, 63, 242, 0.3);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.customTipInput:focus {
+  outline: none;
+  border-color: rgba(123, 63, 242, 0.6);
+}
+
+.sessionInfo {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sessionInfoItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sessionInfoItem:last-child {
+  margin-bottom: 0;
+}
+
+.settleButton {
+  width: 100%;
+  background: linear-gradient(135deg, #7b3ff2 0%, #f093fb 100%);
+}
+
+.statusMessage {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.statusMessage.success {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+.statusMessage.error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.statusMessage.info {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
