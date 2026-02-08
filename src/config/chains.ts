@@ -17,7 +17,7 @@ export const arcTestnet: Chain = {
     },
   },
   blockExplorers: {
-    default: { name: 'Arc Explorer', url: 'https://explorer-testnet.arc.network' },
+    default: { name: 'ArcScan', url: 'https://testnet.arcscan.app' },
   },
   testnet: true,
 }

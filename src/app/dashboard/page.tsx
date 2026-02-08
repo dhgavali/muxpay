@@ -259,7 +259,7 @@ export default function Dashboard() {
                   >
                     <div className={styles.txInfo}>
                       <h4>
-                        {session.userAddress.substring(0, 10)}...{session.userAddress.substring(38)}
+                        {session?.txHash?.substring(0, 10)}...{session?.txHash?.substring(58)}
                       </h4>
                       <p>{new Date(session.updatedAt).toLocaleString()}</p>
                     </div>
@@ -273,7 +273,7 @@ export default function Dashboard() {
                       ${session.totalAmount.toFixed(2)}
                       {session.txHash && (
                         <a
-                          href={`https://explorer-testnet.arc.network/tx/${session.txHash}`}
+                          href={`https://testnet.arcscan.app/tx/${session.txHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{ marginLeft: '0.5rem' }}
