@@ -32,8 +32,9 @@ export function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Link href="/" className={styles.logo}>
-        MuxPay
+      <Link href="/" className={styles.logoContainer}>
+        <div className={styles.logo}>M</div>
+        <span className={styles.brandName}>MuxPay</span>
       </Link>
 
 

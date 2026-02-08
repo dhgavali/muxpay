@@ -12,15 +12,16 @@ import { useToast } from '@/components/ui/Toast';
 import styles from './page.module.css';
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, Zap, CheckCircle, AlertCircle } from 'lucide-react';
+import { Wallet, Zap, CheckCircle, AlertCircle, Globe, Twitter, Github, User, QrCode } from 'lucide-react';
 
 export default function CreatorProfile({ params }: { params: { handle: string } }) {
   const { isConnected, address } = useAccount();
   const { data: creator, isLoading: creatorLoading } = useCreator(params.handle);
   const { balance } = useVaultBalance();
   const { showToast } = useToast();
-  
+
   const [flow, setFlow] = useState<'none' | 'deposit' | 'session'>('none');
+  const [showQr, setShowQr] = useState(false);
 
   // Check if user is viewing their own profile
   const isSelfTipping = useMemo(() => {
@@ -32,9 +33,12 @@ export default function CreatorProfile({ params }: { params: { handle: string } 
   if (creatorLoading) {
     return (
       <div className={styles.main}>
-        <GlassCard>
-          <p style={{ textAlign: 'center', padding: '2rem' }}>Loading creator...</p>
-        </GlassCard>
+        <div className={styles.banner} />
+        <div className={styles.container}>
+          <GlassCard>
+            <p style={{ textAlign: 'center', padding: '2rem' }}>Loading creator...</p>
+          </GlassCard>
+        </div>
       </div>
     );
   }
@@ -43,161 +47,216 @@ export default function CreatorProfile({ params }: { params: { handle: string } 
   if (!creator) {
     return (
       <div className={styles.main}>
-        <GlassCard>
-          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Creator Not Found</h1>
-          <p>The creator @{params.handle} could not be found.</p>
-        </GlassCard>
+        <div className={styles.banner} />
+        <div className={styles.container}>
+          <GlassCard>
+            <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Creator Not Found</h1>
+            <p>The creator @{params.handle} could not be found.</p>
+          </GlassCard>
+        </div>
       </div>
     );
   }
 
+  const badges = ["🚀 Growing", "💻 Tech", "🔥 Early User"];
+  const supporters = 1342;
+  const recentActivity = [
+    { name: "0x7a...4e2", amount: 5, msg: "Great work! ☕️", time: "2h ago" },
+    { name: "Anonymous", amount: 15, msg: "Keep building!", time: "5h ago" },
+    { name: "0x91...b2a", amount: 2, msg: "", time: "1d ago" },
+  ];
+
   return (
     <div className={styles.main}>
-      {/* Header with wallet connection */}
-      <div className={styles.header}>
-        <ConnectButton />
-      </div>
-
-      {/* Creator Profile Card */}
-      <GlassCard className={styles.profileCard} hoverEffect={true}>
-        <motion.div
-          className={styles.avatarContainer}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className={styles.avatar}>
-            {creator.handle.substring(0, 2).toUpperCase()}
+      {/* Brand Header */}
+      <nav className={styles.navbar}>
+        <div className={styles.navContainer}>
+          <div className={styles.brand}>
+            <div className={styles.logo}>M</div>
+            <span className={styles.brandName}>MuxPay</span>
           </div>
-        </motion.div>
+          <span className={styles.motto}>Payments made seamless</span>
+        </div>
+      </nav>
 
-        <h1 className={styles.name}>@{creator.handle}</h1>
-        <p className={styles.bio}>Support this creator with gas-free tips!</p>
-        <p className={styles.address}>{creator.address.substring(0, 10)}...{creator.address.substring(creator.address.length - 8)}</p>
-
-        {!isConnected && (
-          <div className={styles.connectPrompt}>
-            <Wallet size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-            <p>Connect your wallet to start supporting this creator</p>
-          </div>
-        )}
-      </GlassCard>
-
-      {/* Self-tipping prevention message */}
-      {isConnected && isSelfTipping && (
-        <GlassCard>
-          <div style={{ 
-            padding: '2rem', 
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1rem'
-          }}>
-            <AlertCircle size={48} style={{ color: '#f59e0b' }} />
-            <h2 style={{ fontSize: '1.25rem', margin: 0 }}>This is Your Profile</h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', margin: 0 }}>
-              You cannot tip yourself. Share your profile link with others to receive tips!
-            </p>
-            <Button 
-              variant="secondary"
-              onClick={() => {
-                const link = `${window.location.origin}/c/${creator.handle}`;
-                navigator.clipboard.writeText(link);
-                showToast('Link copied to clipboard!', 'success');
-              }}
-            >
-              📋 Copy Profile Link
-            </Button>
-          </div>
-        </GlassCard>
-      )}
-
-      {/* Donation Flow - Only show if NOT self-tipping */}
-      {isConnected && !isSelfTipping && (
-        <div className={styles.flowContainer}>
-          {/* Flow Progress Indicator - Simplified to 2 steps */}
-          <div className={styles.progressSteps}>
-            <div className={`${styles.step} ${flow === 'deposit' ? styles.active : ''} ${balance > 0 ? styles.complete : ''}`}>
-              <div className={styles.stepIcon}>
-                {balance > 0 ? <CheckCircle size={20} /> : '1'}
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          {/* Left Column: Profile Info & About */}
+          <div className={styles.leftColumn}>
+            {/* Profile Card */}
+            <div className={styles.profileCard}>
+              <div className={styles.avatar}>
+                {creator.handle.substring(0, 2).toUpperCase()}
               </div>
-              <span>Deposit USDC</span>
-            </div>
-            <div className={styles.stepLine}></div>
-            <div className={`${styles.step} ${flow === 'session' ? styles.active : ''}`}>
-              <div className={styles.stepIcon}>
-                <Zap size={20} />
-              </div>
-              <span>Tip</span>
-            </div>
-          </div>
+              <h1 className={styles.name}>{creator.handle}</h1>
+              <p className={styles.address}>{creator.address.slice(0, 6)}...{creator.address.slice(-4)}</p>
 
-          {/* Flow Selection or Active Flow */}
-          {flow === 'none' && (
-            <GlassCard>
-              <div style={{ padding: '2rem', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-                  {balance > 0 ? '✅ Ready to Tip!' : 'Deposit USDC to Start'}
-                </h2>
-                <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
-                  {balance > 0 
-                    ? `You have $${balance.toFixed(2)} in your vault. Start a tipping session!`
-                    : 'Deposit USDC into your vault to send gas-free tips'
-                  }
-                </p>
-                <div className={styles.flowButtons}>
-                  {balance <= 0 && (
-                    <Button onClick={() => setFlow('deposit')}>
-                      💰 Deposit USDC
-                    </Button>
-                  )}
-                  {balance > 0 && (
-                    <Button onClick={() => setFlow('session')}>
-                      ⚡ Start Tipping Session
-                    </Button>
-                  )}
+              <div className={styles.badges}>
+                {badges.map(b => (
+                  <span key={b} className={styles.badge}>{b}</span>
+                ))}
+              </div>
+
+              <div className={styles.socials}>
+                <a href="#" className={styles.socialLink}><Globe size={18} /></a>
+                <a href="#" className={styles.socialLink}><Twitter size={18} /></a>
+                <a href="#" className={styles.socialLink}><Github size={18} /></a>
+              </div>
+            </div>
+
+            {/* About Card */}
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>About</h3>
+              <p className={styles.aboutText}>
+                Hey there! I'm using MuxPay to accept crypto payments and tips.
+                If you like my work, consider supporting me.
+                Every tip helps me create more content!
+              </p>
+              <div className={styles.statsRow}>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{supporters.toLocaleString()}</span>
+                  <span className={styles.statLabel}>Supporters</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>Verified</span>
+                  <span className={styles.statLabel}>Status</span>
                 </div>
               </div>
-            </GlassCard>
-          )}
-
-          {flow === 'deposit' && (
-            <div>
-              <DepositFlow 
-                onError={(msg) => showToast(msg, 'error')} 
-                onSuccess={(msg) => showToast(msg, 'success')}
-                onComplete={() => setFlow('session')}
-              />
-              <Button 
-                onClick={() => setFlow('none')} 
-                variant="ghost" 
-                style={{ marginTop: '1rem', width: '100%' }}
-              >
-                ← Back
-              </Button>
             </div>
-          )}
+          </div>
 
-          {flow === 'session' && (
-            <div>
-              <YellowDonationSession 
-                creatorHandle={creator.handle} 
-                creatorAddress={creator.address}
-                onError={(msg) => showToast(msg, 'error')}
-                onSuccess={(msg) => showToast(msg, 'success')}
-              />
-              <Button 
-                onClick={() => setFlow('none')} 
-                variant="ghost" 
-                style={{ marginTop: '1rem', width: '100%' }}
-              >
-                ← Back to Menu
-              </Button>
+          {/* Right Column: Donation & Activity */}
+          <div className={styles.rightColumn}>
+            {/* Donation Card */}
+            <div className={styles.donationCard}>
+              <h3 className={styles.donationHeader}>Buy <span style={{ color: 'hsl(var(--primary))' }}>{creator.handle}</span> a coffee</h3>
+
+              {/* Connect Wallet First */}
+              {!isConnected && (
+                <div style={{ textAlign: 'center', margin: '2rem 0' }}>
+                  <ConnectButton label="Connect Wallet to Tip" showBalance={false} />
+                </div>
+              )}
+
+              {/* Self Tipping Warning */}
+              {isConnected && isSelfTipping && (
+                <div style={{
+                  padding: '1rem',
+                  background: 'hsl(var(--destructive)/0.1)',
+                  color: 'hsl(var(--destructive))',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.9rem',
+                  textAlign: 'center',
+                  border: '1px solid hsl(var(--destructive)/0.2)'
+                }}>
+                  You cannot tip yourself.
+                </div>
+              )}
+
+              {/* Donation Flow */}
+              {isConnected && !isSelfTipping && (
+                <div className={styles.flowContainer} style={{ maxWidth: '100%' }}>
+                  {/* Reusing existing logic but simplifed UI wrapper */}
+                  {flow === 'none' && (
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'hsl(var(--secondary))', borderRadius: '0.5rem' }}>
+                        <p style={{ fontSize: '0.9rem', color: 'hsl(var(--muted-foreground))' }}>Vault Balance</p>
+                        <p style={{ fontSize: '1.5rem', fontWeight: '700' }}>${balance.toFixed(2)}</p>
+                      </div>
+
+                      {balance <= 0 ? (
+                        <Button onClick={() => setFlow('deposit')} style={{ width: '100%' }}>
+                          Deposit USDC
+                        </Button>
+                      ) : (
+                        <Button onClick={() => setFlow('session')} style={{ width: '100%' }}>
+                          Start Tipping Session
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {flow === 'deposit' && (
+                    <div>
+                      <DepositFlow
+                        onError={(msg) => showToast(msg, 'error')}
+                        onSuccess={(msg) => showToast(msg, 'success')}
+                        onComplete={() => setFlow('session')}
+                      />
+                      <Button onClick={() => setFlow('none')} variant="ghost" size-sm style={{ marginTop: '0.5rem' }}>Cancel</Button>
+                    </div>
+                  )}
+
+                  {flow === 'session' && (
+                    <div>
+                      <YellowDonationSession
+                        creatorHandle={creator.handle}
+                        creatorAddress={creator.address}
+                        onError={(msg) => showToast(msg, 'error')}
+                        onSuccess={(msg) => showToast(msg, 'success')}
+                      />
+                      <Button onClick={() => setFlow('none')} variant="ghost" size-sm style={{ marginTop: '0.5rem' }}>Cancel session</Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* QR Code Toggle */}
+              <div className={styles.qrToggle} onClick={() => setShowQr(!showQr)}>
+                <QrCode size={16} />
+                <span>{showQr ? "Hide QR Code" : "Show QR Code"}</span>
+              </div>
+
+              {showQr && (
+                <div className={styles.qrCodeBox}>
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                    alt="QR Code"
+                    style={{ borderRadius: '0.5rem' }}
+                  />
+                  <p style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: 'hsl(var(--muted-foreground))' }}>Scan to visit profile</p>
+                </div>
+              )}
             </div>
-          )}
+
+            {/* Recent Supporters */}
+            <div className={styles.card}>
+              <h3 className={styles.sectionTitle}>Recent Supporters</h3>
+              <div className={styles.activityList}>
+                {recentActivity.map((act, i) => (
+                  <div key={i} className={styles.activityItem}>
+                    <div className={styles.activityAvatar}>
+                      <User size={16} />
+                    </div>
+                    <div className={styles.activityContent}>
+                      <div className={styles.activityHeader}>
+                        <span className={styles.activityName}>{act.name}</span>
+                        <span className={styles.activityAmount}>+${act.amount}</span>
+                      </div>
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{act.time}</span>
+                      {act.msg && <div className={styles.activityMsg}>{act.msg}</div>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <div className={styles.brand}>
+            <div className={styles.logoSmall}>M</div>
+            <span className={styles.brandNameUtils}>Powered by MuxPay</span>
+          </div>
+          <div className={styles.footerLinks}>
+            <p>Join us to become a creator and receive crypto tips instantly.</p>
+            <a href="/" className={styles.footerLink}>Get Started →</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export function Footer() {
             <div className={styles.container}>
                 <div className={styles.grid}>
                     <div className={styles.brand}>
-                        <h3>Lumina</h3>
+                        <h3>MuxPay</h3>
                         <p>Unified payment orchestration for the modern internet. Bridging crypto and fiat with elegance.</p>
                     </div>
                     <div className={styles.column}>
@@ -35,7 +35,7 @@ export function Footer() {
                     </div>
                 </div>
                 <div className={styles.copyright}>
-                    <p>© 2026 Lumina Inc. All rights reserved.</p>
+                    <p>© 2026 MuxPay Inc. All rights reserved.</p>
                     <p>Designed with Care.</p>
                 </div>
             </div>

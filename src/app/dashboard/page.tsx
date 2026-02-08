@@ -5,6 +5,7 @@ import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { Button } from '@/components/ui/Button';
+import { Sidebar } from '@/components/layout/Sidebar';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { useCreatorByAddress, useCreatorWithSessions, useCreateCreator } from '@/hooks/useApi';
@@ -34,7 +35,7 @@ export default function Dashboard() {
 
   const handleCreateCreator = async () => {
     if (!handle || !address) return;
-    
+
     setIsCreating(true);
     try {
       await createCreatorMutation.mutateAsync({
@@ -118,7 +119,7 @@ export default function Dashboard() {
             <p className={styles.subtitle} style={{ marginBottom: '2rem' }}>
               Choose a unique handle for your payment page
             </p>
-            
+
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.8)' }}>
                 Your Handle
@@ -168,133 +169,164 @@ export default function Dashboard() {
 
   // Show dashboard
   return (
-    <>
-      <Navbar />
-      <main className={styles.container}>
-        <div className={styles.header}>
-          <div>
-            <h1 className={styles.title}>Welcome back, @{creator?.handle}</h1>
-            <p className={styles.subtitle}>Here's what's happening with your tips.</p>
+    <div className={styles.layout}>
+      <Sidebar
+        user={creator ? { name: creator.handle, handle: creator.handle } : undefined}
+        role="Creator"
+        items={[
+          { icon: TrendingUp, label: "Overview", href: "/dashboard" },
+          // Add more menu items if they exist, or just placeholder
+        ]}
+      />
+
+      <div className={styles.mainWrapper}>
+        <main className={styles.mainContent}>
+          <header className={styles.header}>
+            <div>
+              <h1 className={styles.title}>Dashboard</h1>
+              <p className={styles.subtitle}>Welcome back, {creator?.handle}</p>
+            </div>
+            <div className={styles.dateDisplay}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            </div>
+          </header>
+
+          {/* Stats Grid */}
+          <div className={styles.analyticsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statHeader}>
+                <span>Total Earnings</span>
+                <span className={styles.statBadge}>Live</span>
+              </div>
+              <div className={styles.statValue}>${totalEarnings.toFixed(2)}</div>
+              <div className={styles.statPeriod}>{settledSessions.length} settled sessions</div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statHeader}>
+                <span>Pending</span>
+                <DollarSign size={16} className={styles.iconMuted} />
+              </div>
+              <div className={styles.statValue}>
+                ${openSessions.reduce((sum, s) => sum + s.totalAmount, 0).toFixed(2)}
+              </div>
+              <div className={styles.statPeriod}>{openSessions.length} open sessions</div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statHeader}>
+                <span>Total Sessions</span>
+                <Users size={16} className={styles.iconMuted} />
+              </div>
+              <div className={styles.statValue}>{creatorWithSessions?.sessions?.length || 0}</div>
+              <div className={styles.statPeriod}>All time</div>
+            </div>
           </div>
-        </div>
 
-        {/* Stats Grid */}
-        <div className={styles.grid}>
-          <GlassCard>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ 
-                padding: '0.75rem', 
-                background: 'rgba(123, 63, 242, 0.2)', 
-                borderRadius: '12px' 
-              }}>
-                <DollarSign size={24} color="#7b3ff2" />
+          {/* Revenue Chart Placeholder */}
+          <div className={styles.chartSection}>
+            <div className={styles.sectionHeader}>
+              <h3>Revenue Overview</h3>
+              <div className={styles.chartControls}>
+                <button className={styles.chartBtnActive}>1M</button>
+                <button className={styles.chartBtn}>3M</button>
+                <button className={styles.chartBtn}>6M</button>
+                <button className={styles.chartBtn}>1Y</button>
               </div>
-              <h3 className={styles.statLabel}>Total Earnings</h3>
             </div>
-            <div className={styles.statValue}>${totalEarnings.toFixed(2)}</div>
-            <p className={styles.statSubtext}>{settledSessions.length} settled sessions</p>
-          </GlassCard>
+            <div className={styles.chartPlaceholder}>
+              {/* Simulated Graph SVG */}
+              <svg viewBox="0 0 800 200" className={styles.chartSvg}>
+                <path
+                  d="M0 150 C 150 150, 200 80, 300 100 S 500 120, 600 50 S 700 80, 800 30"
+                  fill="none"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth="3"
+                />
+                <path
+                  d="M0 150 C 150 150, 200 80, 300 100 S 500 120, 600 50 S 700 80, 800 30 L 800 200 L 0 200 Z"
+                  fill="url(#gradient)"
+                  opacity="0.1"
+                />
+                <defs>
+                  <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" />
+                    <stop offset="100%" stopColor="transparent" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+        </main>
 
-          <GlassCard>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ 
-                padding: '0.75rem', 
-                background: 'rgba(34, 197, 94, 0.2)', 
-                borderRadius: '12px' 
-              }}>
-                <TrendingUp size={24} color="#22c55e" />
-              </div>
-              <h3 className={styles.statLabel}>Pending</h3>
-            </div>
-            <div className={styles.statValue}>
-              ${openSessions.reduce((sum, s) => sum + s.totalAmount, 0).toFixed(2)}
-            </div>
-            <p className={styles.statSubtext}>{openSessions.length} open sessions</p>
-          </GlassCard>
+        <aside className={styles.rightPanel}>
+          {/* Payment Link Card */}
+          <div className={styles.panelCard}>
+            <h3 className={styles.panelTitle}>Payment Link</h3>
+            <p className={styles.panelDesc}>Share this link to receive tips.</p>
 
-          <GlassCard>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <div style={{ 
-                padding: '0.75rem', 
-                background: 'rgba(59, 130, 246, 0.2)', 
-                borderRadius: '12px' 
-              }}>
-                <Users size={24} color="#3b82f6" />
-              </div>
-              <h3 className={styles.statLabel}>Total Sessions</h3>
+            <div className={styles.linkBox}>
+              <span className={styles.linkUrl}>
+                {typeof window !== 'undefined' && `${window.location.host}/c/${creator?.handle}`}
+              </span>
+              <button onClick={copyLink} className={styles.copyBtn}>
+                <Copy size={16} />
+              </button>
             </div>
-            <div className={styles.statValue}>{creatorWithSessions?.sessions?.length || 0}</div>
-            <p className={styles.statSubtext}>All time</p>
-          </GlassCard>
-        </div>
 
-        {/* Payment Link */}
-        <GlassCard>
-          <h3 className={styles.sectionTitle} style={{ marginBottom: '1rem' }}>Your Payment Link</h3>
-          <div className={styles.linkSection}>
-            <span className={styles.linkText}>
-              {typeof window !== 'undefined' && `${window.location.origin}/c/${creator?.handle}`}
-            </span>
-            <Button variant="ghost" onClick={copyLink}>
-              <Copy size={16} />
+            {creator?.handle && (
+              <ExternalLink
+                size={16}
+                className={styles.viewBtn}
+                style={{ display: 'none' }} // Hiding for now to match layout exactness or just keep copy
+              />
+            )}
+            <Button
+              variant="outline"
+              size-sm
+              className={styles.viewBtn}
+              onClick={() => window.open(`/c/${creator?.handle}`, '_blank')}
+            >
+              View Public Page <ExternalLink size={14} style={{ marginLeft: 4 }} />
             </Button>
           </div>
-          <p className={styles.statSubtext} style={{ marginTop: '0.5rem' }}>
-            Share this link to receive tips and donations
-          </p>
-        </GlassCard>
 
-        {/* Recent Sessions */}
-        <h2 className={styles.sectionTitle}>Recent Sessions</h2>
-        <GlassCard>
-          <div className={styles.transactionList}>
-            {creatorWithSessions?.sessions && creatorWithSessions.sessions.length > 0 ? (
-              creatorWithSessions.sessions
-                .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-                .slice(0, 10)
-                .map((session) => (
-                  <motion.div
-                    key={session.id}
-                    className={styles.transactionItem}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                  >
-                    <div className={styles.txInfo}>
-                      <h4>
-                        {session?.txHash?.substring(0, 10)}...{session?.txHash?.substring(58)}
-                      </h4>
-                      <p>{new Date(session.updatedAt).toLocaleString()}</p>
+          {/* Recent Sessions */}
+          <div className={styles.panelCard}>
+            <div className={styles.panelHeader}>
+              <h3 className={styles.panelTitle}>Recent Tips</h3>
+            </div>
+
+            <div className={styles.tipsList}>
+              {creatorWithSessions?.sessions && creatorWithSessions.sessions.length > 0 ? (
+                creatorWithSessions.sessions
+                  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                  .slice(0, 5) // Show top 5
+                  .map((session) => (
+                    <div key={session.id} className={styles.tipItem}>
+                      <div className={styles.tipIcon}>
+                        <TrendingUp size={16} />
+                      </div>
+                      <div className={styles.tipInfo}>
+                        <span className={styles.tipAmount}>
+                          ${session.totalAmount.toFixed(2)}
+                        </span>
+                        <span className={styles.tipFrom}>
+                          {session.status === 'SETTLED' ? 'Settled' : 'Pending'} ({session.txHash ? 'Tx' : ''})
+                        </span>
+                      </div>
+                      <div className={styles.tipTime}>
+                        {new Date(session.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      </div>
                     </div>
-                    <div className={styles.txAmount}>
-                      <span style={{ 
-                        color: session.status === 'SETTLED' ? '#22c55e' : '#f59e0b',
-                        marginRight: '0.5rem'
-                      }}>
-                        {session.status === 'SETTLED' ? '✓' : '⏳'}
-                      </span>
-                      ${session.totalAmount.toFixed(2)}
-                      {session.txHash && (
-                        <a
-                          href={`https://testnet.arcscan.app/tx/${session.txHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ marginLeft: '0.5rem' }}
-                        >
-                          <ExternalLink size={14} />
-                        </a>
-                      )}
-                    </div>
-                  </motion.div>
-                ))
-            ) : (
-              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.6)', padding: '2rem' }}>
-                No sessions yet. Share your link to start receiving tips!
-              </p>
-            )}
+                  ))
+              ) : (
+                <p className={styles.emptyState}>No tips yet.</p>
+              )}
+            </div>
           </div>
-        </GlassCard>
-      </main>
-      <Footer />
-    </>
+        </aside>
+      </div>
+    </div>
   );
 }

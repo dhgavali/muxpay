@@ -1,13 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { Zap, Globe, ShieldCheck } from "lucide-react";
+import { AnimatedBeam } from "@/components/landing/AnimatedBeam";
+import { BentoGrid } from "@/components/landing/BentoGrid";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function Home() {
 
@@ -26,9 +28,7 @@ export default function Home() {
     show: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.5
-      }
+      transition: { duration: 0.5, ease: "easeOut" }
     },
   };
 
@@ -36,76 +36,87 @@ export default function Home() {
     <div className={styles.main}>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.gradientBg}>
-          <div className={`${styles.blob} ${styles.blob1}`} />
-          <div className={`${styles.blob} ${styles.blob2}`} />
-          <div className={`${styles.blob} ${styles.blob3}`} />
-        </div>
+      {/* Hero Section - Split Layout */}
+      <section className={styles.heroSection}>
+        <div className={styles.heroContainer}>
+          {/* Left Content */}
+          <motion.div
+            className={styles.heroContent}
+            variants={containerVars}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.div variants={itemVars} className={styles.badge}>
+              <span className={styles.badgeDot} />
+              Now available for everyone
+            </motion.div>
 
-        <motion.div
-          variants={containerVars}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.h1 className={styles.title} variants={itemVars}>
-            The Future of Payments <br /> is Unified.
-          </motion.h1>
-          <motion.p className={styles.subtitle} variants={itemVars}>
-            Accept crypto, fiat, and everything in between.
-            A single, elegant platform for creators, businesses, and individuals.
-            No more wallet fragmentation.
-          </motion.p>
-          <motion.div className={styles.ctaGroup} variants={itemVars}>
-            <Link href="/dashboard">
-              <Button>Get Started</Button>
-            </Link>
-            <Link href="/business/dashboard">
-              <Button variant="secondary">For Business</Button>
-            </Link>
+            <motion.h1 className={styles.heroTitle} variants={itemVars}>
+              Unified payments for the <span className={styles.highlight}>modern economy</span>.
+            </motion.h1>
+
+            <motion.p className={styles.heroSubtitle} variants={itemVars}>
+              Accept crypto, fiat, and cards through a single API.
+              MuxPay abstracts the complexity of blockchain so you can focus on your business.
+            </motion.p>
+
+            <motion.div className={styles.heroActions} variants={itemVars}>
+              <Link href="/dashboard">
+                <Button className={styles.primaryBtn}>
+                  Start Integration <ArrowRight size={16} />
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button variant="ghost" className={styles.secondaryBtn}>
+                  Contact Sales
+                </Button>
+              </Link>
+            </motion.div>
+
+            <motion.div className={styles.trustSignals} variants={itemVars}>
+              <div className={styles.trustItem}>
+                <CheckCircle2 size={16} className={styles.checkIcon} />
+                <span>Instant Settlement</span>
+              </div>
+              <div className={styles.trustItem}>
+                <CheckCircle2 size={16} className={styles.checkIcon} />
+                <span>Global Coverage</span>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
+
+          {/* Right Visual */}
+          <motion.div
+            className={styles.heroVisual}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className={styles.visualCard}>
+              <AnimatedBeam />
+            </div>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Features Grid */}
-      <motion.section
-        className={styles.features}
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <GlassCard hoverEffect>
-          <div className={styles.icon}>
-            <Globe size={32} />
-          </div>
-          <h3 className={styles.featureTitle}>Global Payments</h3>
-          <p className={styles.featureText}>
-            Accept payments from anywhere in the world. We handle the currency conversion and chain abstraction.
-          </p>
-        </GlassCard>
+      {/* Value Prop Section */}
+      <BentoGrid />
 
-        <GlassCard hoverEffect>
-          <div className={styles.icon}>
-            <Zap size={32} />
-          </div>
-          <h3 className={styles.featureTitle}>Instant Settlement</h3>
-          <p className={styles.featureText}>
-            Get paid instantly in your preferred currency. No more waiting days for bank transfers.
-          </p>
-        </GlassCard>
+      {/* How It Works Section */}
+      <HowItWorks />
 
-        <GlassCard hoverEffect>
-          <div className={styles.icon}>
-            <ShieldCheck size={32} />
+      {/* Final CTA Section */}
+      <section className={styles.ctaSection}>
+        <div className={styles.ctaContainer}>
+          <h2 className={styles.ctaTitle}>Ready to simplify your payments?</h2>
+          <p className={styles.ctaText}>Join thousands of creators and businesses using MuxPay today.</p>
+          <div className={styles.ctaButtons}>
+            <Link href="/dashboard">
+              <Button variant="primary" style={{ minWidth: '160px' }}>Get Started</Button>
+            </Link>
           </div>
-          <h3 className={styles.featureTitle}>Secure & Private</h3>
-          <p className={styles.featureText}>
-            Enterprise-grade security for every transaction. Your data is encrypted and your funds are safe.
-          </p>
-        </GlassCard>
-      </motion.section>
+        </div>
+      </section>
 
       <Footer />
     </div>

@@ -34,7 +34,7 @@ export default function CreatorDashboard() {
                     <GlassCard>
                         <h3 className={styles.statLabel}>Your Payment Link</h3>
                         <div className={styles.linkSection} style={{ marginTop: '1rem' }}>
-                            <span className={styles.linkText}>lumina.so/c/{user.handle}</span>
+                            <span className={styles.linkText}>muxpay.link/c/{user.handle}</span>
                             <Button variant="ghost" size-sm onClick={() => alert('Copied!')}>
                                 <Copy size={16} />
                             </Button>

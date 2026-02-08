@@ -1,0 +1,194 @@
+.section {
+    padding: 8rem 2rem;
+    background-color: hsl(var(--background));
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 5rem;
+    max-width: 700px;
+    margin-inline: auto;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 1.125rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.6;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, minmax(250px, auto));
+    gap: 1.5rem;
+}
+
+.card {
+    background: white;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Card Sizes */
+.cardLarge {
+    grid-column: span 2;
+    grid-row: span 2;
+    background: linear-gradient(to bottom right, white, hsl(var(--secondary) / 0.3));
+}
+
+.cardWide {
+    grid-column: span 1;
+    grid-row: span 1;
+    /* In a 3-col grid, the last item might want to be wider or standard. Let's make it standard for now to fit the 3x2 grid logic with a large 2x2 item. Wait, 2x2 takes 4 slots. We have 3 cols, 2 rows = 6 slots. Wide 2x2 = 4 slots. Remaining = 2 slots. So we have Large (4), Small (1), Small (1). That fills 6. Wait, grid is 3 cols. 
+     Row 1: [Large (2 cols)] [Small]
+     Row 2: [Large (2 cols, cont)] [Small]
+     
+     Actually, let's do:
+     Row 1: [Large (2 cols, 2 rows)] [Small]
+     Row 2:                         [Small]
+     Row 3: [Wide (3 cols)] (Optional)
+  */
+}
+
+.cardContent {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cardContentHorizontal {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+}
+
+.cardTitle {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    color: hsl(var(--foreground));
+    letter-spacing: -0.02em;
+}
+
+.cardText {
+    color: hsl(var(--muted-foreground));
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 80%;
+}
+
+.cardTitleSmall {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem;
+    color: hsl(var(--foreground));
+}
+
+.cardTextSmall {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.iconWrapper {
+    width: 48px;
+    height: 48px;
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconWrapperLarge {
+    width: 64px;
+    height: 64px;
+    background: hsl(var(--primary));
+    color: white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.3);
+}
+
+.cardVisual {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+    pointer-events: none;
+    /* In a real app, add an image or SVG here */
+    background: radial-gradient(circle at bottom right, hsl(var(--primary) / 0.1), transparent 70%);
+}
+
+.visualMap {
+    /* Placeholder for map visual */
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(hsl(var(--muted-foreground)/0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+    mask-image: radial-gradient(circle at bottom right, black 40%, transparent 100%);
+}
+
+.msAuto {
+    margin-left: auto;
+}
+
+.arrowIcon {
+    color: hsl(var(--muted-foreground));
+    transition: transform 0.2s ease;
+}
+
+.card:hover .arrowIcon {
+    transform: translateX(4px);
+    color: hsl(var(--primary));
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .cardLarge {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .cardWide {
+        grid-column: span 1;
+    }
+}
