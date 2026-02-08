@@ -39,7 +39,9 @@ export function useCreateCreator() {
   return useMutation({
     mutationFn: (data: CreateCreatorRequest) => api.createCreator(data),
     onSuccess: (data) => {
+      // Invalidate all creator-related queries to refresh dashboard
       queryClient.invalidateQueries({ queryKey: ['creator', 'address', data.address] });
+      queryClient.invalidateQueries({ queryKey: ['creator', 'sessions', data.address] });
       queryClient.invalidateQueries({ queryKey: ['creator', data.handle] });
     },
   });

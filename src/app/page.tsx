@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import { useAccount } from "wagmi";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,9 +10,19 @@ import { Footer } from "@/components/layout/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { Wallet, Zap, Globe, ShieldCheck } from "lucide-react";
+import { Zap, Globe, ShieldCheck } from "lucide-react";
 
 export default function Home() {
+  const { isConnected } = useAccount();
+  const router = useRouter();
+
+  // Redirect to dashboard when wallet connects
+  useEffect(() => {
+    if (isConnected) {
+      router.push('/dashboard');
+    }
+  }, [isConnected, router]);
+
   const containerVars: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -57,8 +70,8 @@ export default function Home() {
             No more wallet fragmentation.
           </motion.p>
           <motion.div className={styles.ctaGroup} variants={itemVars}>
-            <Link href="/creator/dashboard">
-              <Button size-lg>For Creators</Button>
+            <Link href="/dashboard">
+              <Button>Get Started</Button>
             </Link>
             <Link href="/business/dashboard">
               <Button variant="secondary">For Business</Button>

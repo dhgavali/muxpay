@@ -11,6 +11,7 @@ import { useCreatorByAddress, useCreatorWithSessions, useCreateCreator } from '@
 import styles from './page.module.css';
 import { Copy, DollarSign, TrendingUp, Users, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '@/components/ui/Toast';
 
 export default function Dashboard() {
   const { address, isConnected } = useAccount();
@@ -18,9 +19,10 @@ export default function Dashboard() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [handle, setHandle] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const { showToast } = useToast();
 
-  const { data: creator, isLoading: creatorLoading, error: creatorError } = useCreatorByAddress(address);
-  const { data: creatorWithSessions, isLoading: sessionsLoading, refetch } = useCreatorWithSessions(address);
+  const { data: creator, isLoading: creatorLoading, error: creatorError, refetch: refetchCreator } = useCreatorByAddress(address);
+  const { data: creatorWithSessions, isLoading: sessionsLoading, refetch: refetchSessions } = useCreatorWithSessions(address);
   const createCreatorMutation = useCreateCreator();
 
   // Redirect if not connected
@@ -41,8 +43,8 @@ export default function Dashboard() {
       });
       setShowCreateForm(false);
       setHandle('');
-      // Refetch to update UI
-      setTimeout(() => refetch(), 1000);
+      // Refetch both queries to update UI immediately
+      await Promise.all([refetchCreator(), refetchSessions()]);
     } catch (error: any) {
       alert(error.message || 'Failed to create creator profile');
     } finally {
@@ -54,7 +56,7 @@ export default function Dashboard() {
     if (creator) {
       const link = `${window.location.origin}/c/${creator.handle}`;
       navigator.clipboard.writeText(link);
-      alert('Link copied to clipboard!');
+      showToast("Link copied to clipboard!", "success")
     }
   };
 

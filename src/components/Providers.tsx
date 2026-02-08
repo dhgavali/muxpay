@@ -6,6 +6,7 @@ import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { config } from '@/config/wagmi';
 import { arcTestnet } from '@/config/chains';
 import { ReactNode } from 'react';
+import { ToastProvider } from '@/components/ui/Toast';
 import '@rainbow-me/rainbowkit/styles.css';
 
 const queryClient = new QueryClient({
@@ -29,7 +30,9 @@ export function Providers({ children }: { children: ReactNode }) {
             borderRadius: 'medium',
           })}
         >
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

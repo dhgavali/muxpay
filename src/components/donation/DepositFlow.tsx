@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/Button';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -9,51 +9,93 @@ import { useUSDCBalance, useUSDCAllowance, useApproveUSDC } from '@/hooks/useUSD
 import { useVaultDeposit } from '@/hooks/useVault';
 import styles from './DonationFlow.module.css';
 
-export function DepositFlow() {
+interface DepositFlowProps {
+  onError?: (message: string) => void;
+  onSuccess?: (message: string) => void;
+  onComplete?: () => void; // Called when deposit is complete to advance to tip section
+}
+
+export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps = {}) {
   const { address } = useAccount();
   const { usdcAddress } = useUSDCAddress();
   const { balance: usdcBalance, refetch: refetchUSDCBalance } = useUSDCBalance(usdcAddress);
   const { allowance, refetch: refetchAllowance } = useUSDCAllowance(usdcAddress);
   
-  const { approve, isPending: isApproving, isConfirming: isApprovingConfirming, isSuccess: isApproved } = useApproveUSDC(usdcAddress);
-  const { deposit, isPending: isDepositing, isConfirming: isDepositingConfirming, isSuccess: isDeposited } = useVaultDeposit();
+  const { approve, isPending: isApproving, isConfirming: isApprovingConfirming, isSuccess: isApproved, error: approveError } = useApproveUSDC(usdcAddress);
+  const { deposit, isPending: isDepositing, isConfirming: isDepositingConfirming, isSuccess: isDeposited, error: depositError } = useVaultDeposit();
   
   const [amount, setAmount] = useState('');
   const [step, setStep] = useState<'approve' | 'deposit'>('approve');
+  
+  // Track if we've already handled success to prevent infinite callbacks
+  const hasHandledApproval = useRef(false);
+  const hasHandledDeposit = useRef(false);
 
   const amountNum = parseFloat(amount) || 0;
   const needsApproval = allowance < amountNum;
 
+  // Handle approval errors
+  useEffect(() => {
+    if (approveError && onError) {
+      onError('Approval failed: ' + ((approveError as any)?.shortMessage || approveError.message));
+    }
+  }, [approveError, onError]);
+
+  // Handle deposit errors
+  useEffect(() => {
+    if (depositError && onError) {
+      onError('Deposit failed: ' + ((depositError as any)?.shortMessage || depositError.message));
+    }
+  }, [depositError, onError]);
+
+  // Handle successful approval - only once
+  useEffect(() => {
+    if (isApproved && step === 'approve' && !hasHandledApproval.current) {
+      hasHandledApproval.current = true;
+      setStep('deposit');
+      refetchAllowance();
+      onSuccess?.('USDC approved successfully!');
+    }
+  }, [isApproved, step, refetchAllowance, onSuccess]);
+
+  // Handle successful deposit - only once
+  useEffect(() => {
+    if (isDeposited && !hasHandledDeposit.current) {
+      hasHandledDeposit.current = true;
+      onSuccess?.('Deposit successful!');
+      
+      // Refetch balances
+      refetchUSDCBalance();
+      refetchAllowance();
+      
+      // Reset form
+      setAmount('');
+      setStep('approve');
+      
+      // Auto-advance to tip section after a short delay
+      setTimeout(() => {
+        onComplete?.();
+      }, 1500);
+    }
+  }, [isDeposited, refetchUSDCBalance, refetchAllowance, onSuccess, onComplete]);
+
+  // Reset handled flags when user starts a new transaction
   const handleApprove = async () => {
     if (amountNum <= 0) return;
+    hasHandledApproval.current = false;
     approve(amountNum);
   };
 
   const handleDeposit = async () => {
     if (amountNum <= 0) return;
+    hasHandledDeposit.current = false;
     deposit(amountNum);
   };
-
-  // Auto-advance to deposit step after approval
-  if (isApproved && step === 'approve') {
-    setStep('deposit');
-    refetchAllowance();
-  }
-
-  // Reset after successful deposit
-  if (isDeposited) {
-    setTimeout(() => {
-      setAmount('');
-      setStep('approve');
-      refetchUSDCBalance();
-      refetchAllowance();
-    }, 2000);
-  }
 
   return (
     <GlassCard>
       <div className={styles.widgetContainer}>
-        <h3>Step 2: Deposit to Vault</h3>
+        <h3>Deposit to Vault</h3>
         <p className={styles.description}>
           Deposit USDC into the Arc Vault Contract
         </p>

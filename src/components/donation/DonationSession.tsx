@@ -12,9 +12,11 @@ import styles from './DonationFlow.module.css';
 interface DonationSessionProps {
   creatorHandle: string;
   creatorAddress: string;
+  onError?: (message: string) => void;
+  onSuccess?: (message: string) => void;
 }
 
-export function DonationSession({ creatorHandle, creatorAddress }: DonationSessionProps) {
+export function DonationSession({ creatorHandle, creatorAddress, onError, onSuccess }: DonationSessionProps) {
   const { address } = useAccount();
   const { balance, refetch: refetchBalance } = useVaultBalance();
   const { nonce, refetch: refetchNonce } = useUserNonce();
@@ -58,7 +60,7 @@ export function DonationSession({ creatorHandle, creatorAddress }: DonationSessi
         domain: EIP712_DOMAIN,
         types: EIP712_TYPES,
         primaryType: 'TipSession',
-        message,
+        message: message as any ,
       });
 
       // Send to backend (Yellow logic - off-chain)
@@ -72,11 +74,14 @@ export function DonationSession({ creatorHandle, creatorAddress }: DonationSessi
 
       setTotalTipped(newTotal);
       setStatus({ type: 'success', message: `$${amount} tip signed! (Off-chain)` });
+      onSuccess?.(`$${amount} tip signed!`);
       setCustomAmount('');
       
     } catch (error: any) {
       console.error('Tip error:', error);
-      setStatus({ type: 'error', message: error.message || 'Failed to send tip' });
+      const errorMsg = error.message || 'Failed to send tip';
+      setStatus({ type: 'error', message: errorMsg });
+      onError?.(errorMsg);
     }
   };
 
@@ -100,6 +105,7 @@ export function DonationSession({ creatorHandle, creatorAddress }: DonationSessi
         type: 'success', 
         message: `✅ Settled! Tx: ${result.txHash.substring(0, 10)}...` 
       });
+      onSuccess?.(`Settled! Tx: ${result.txHash.substring(0, 10)}...`);
       
       setTotalTipped(0);
       
@@ -111,7 +117,9 @@ export function DonationSession({ creatorHandle, creatorAddress }: DonationSessi
       
     } catch (error: any) {
       console.error('Settle error:', error);
-      setStatus({ type: 'error', message: error.message || 'Settlement failed' });
+      const errorMsg = error.message || 'Settlement failed';
+      setStatus({ type: 'error', message: errorMsg });
+      onError?.(errorMsg);
     }
   };
 
