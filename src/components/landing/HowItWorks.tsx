@@ -6,18 +6,18 @@ import styles from "./HowItWorks.module.css";
 const steps = [
     {
         number: "01",
-        title: "Connect",
-        description: "Link your wallet or bank account in seconds. We support 50+ providers."
+        title: "Deposit",
+        description: "Users deposit USDC into a secure on-chain Vault to fund their tipping balance."
     },
     {
         number: "02",
-        title: "Customize",
-        description: "Create your unique payment link or use our API to integrate into your app."
+        title: "Tip Instantly",
+        description: "Send unlimited micro-tips ($1, $5) off-chain via Yellow State Channels. Zero gas fees."
     },
     {
         number: "03",
-        title: "Earn",
-        description: "Start accepting payments instantly. Funds are settled directly to you."
+        title: "Settle",
+        description: "When the session ends, the total amount settles on-chain in a single transaction."
     }
 ];
 

@@ -52,12 +52,13 @@ export default function Home() {
             </motion.div>
 
             <motion.h1 className={styles.heroTitle} variants={itemVars}>
-              Unified payments for the <span className={styles.highlight}>modern economy</span>.
+              Accept <span className={styles.highlight}>Any Crypto</span>. <br />
+              Receive in One Wallet.
             </motion.h1>
 
             <motion.p className={styles.heroSubtitle} variants={itemVars}>
-              Accept crypto, fiat, and cards through a single API.
-              MuxPay abstracts the complexity of blockchain so you can focus on your business.
+              MuxPay unifies liquidity from multiple networks.
+              Fans pay with their favorite tokens, and you receive stablecoins directly in your preferred wallet.
             </motion.p>
 
             <motion.div className={styles.heroActions} variants={itemVars}>

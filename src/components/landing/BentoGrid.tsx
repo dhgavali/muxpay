@@ -31,15 +31,16 @@ export function BentoGrid() {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapperLarge}>
-                                <Globe size={32} />
+                                <Zap size={32} />
                             </div>
-                            <h3 className={styles.cardTitle}>Universal Acceptance</h3>
+                            <h3 className={styles.cardTitle}>Gas-Free Micro-Tipping</h3>
                             <p className={styles.cardText}>
-                                Accept payments from 135+ currencies, crypto, and local payment methods via a single integration.
+                                Traditional on-chain tips require one transaction per tip.
+                                With Yellow state channels, we lock funds once and process unlimited tips off-chain,
+                                reducing costs by over 95%.
                             </p>
                         </div>
                         <div className={styles.cardVisual}>
-                            {/* Abstract Map or Globe Visual */}
                             <div className={styles.visualMap} />
                         </div>
                     </motion.div>
@@ -55,11 +56,11 @@ export function BentoGrid() {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapper}>
-                                <Zap size={24} />
+                                <Globe size={24} />
                             </div>
-                            <h3 className={styles.cardTitleSmall}>Instant Settlement</h3>
+                            <h3 className={styles.cardTitleSmall}>Real-Time Feedback</h3>
                             <p className={styles.cardTextSmall}>
-                                Funds land in your account immediately. No holding periods.
+                                Fans get instant "Tip Sent" confirmation. No waiting for blockchain block times.
                             </p>
                         </div>
                     </motion.div>
@@ -76,9 +77,9 @@ export function BentoGrid() {
                             <div className={styles.iconWrapper}>
                                 <ShieldCheck size={24} />
                             </div>
-                            <h3 className={styles.cardTitleSmall}>Bank-Grade Security</h3>
+                            <h3 className={styles.cardTitleSmall}>On-Chain Security</h3>
                             <p className={styles.cardTextSmall}>
-                                AES-256 encryption and fraud detection built-in.
+                                Off-chain speed with on-chain finality. Your funds are always settled securely.
                             </p>
                         </div>
                     </motion.div>
@@ -96,9 +97,9 @@ export function BentoGrid() {
                                 <Wallet size={24} />
                             </div>
                             <div>
-                                <h3 className={styles.cardTitleSmall}>Unified Wallet</h3>
+                                <h3 className={styles.cardTitleSmall}>Universal Gateway (Coming Soon)</h3>
                                 <p className={styles.cardTextSmall}>
-                                    Manage all your assets in one place. Swap, send, and withdraw with zero friction.
+                                    Accept tokens from any chain and settle in USDC on your preferred network.
                                 </p>
                             </div>
                             <div className={styles.msAuto}>
