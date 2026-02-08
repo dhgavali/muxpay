@@ -8,6 +8,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 export const metadata: Metadata = {
   title: 'Mux Pay | Unified Payment Portal',
   description: 'Premium payment orchestration for creators and businesses.',
+  icons: {
+    icon: '/M.png',
+    apple: '/M.png',
+  },
 };
 
 export default function RootLayout({
