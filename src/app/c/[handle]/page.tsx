@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { DepositFlow } from '@/components/donation/DepositFlow';
-import { DonationSession } from '@/components/donation/DonationSession';
+import { YellowDonationSession } from '@/components/donation/YellowDonationSession';
 import { useCreator } from '@/hooks/useApi';
 import { useVaultBalance } from '@/hooks/useVault';
 import { useToast } from '@/components/ui/Toast';
@@ -181,7 +181,7 @@ export default function CreatorProfile({ params }: { params: { handle: string } 
 
           {flow === 'session' && (
             <div>
-              <DonationSession 
+              <YellowDonationSession 
                 creatorHandle={creator.handle} 
                 creatorAddress={creator.address}
                 onError={(msg) => showToast(msg, 'error')}
