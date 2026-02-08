@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { Button } from '@/components/ui/Button';
 import styles from './Navbar.module.css';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -35,21 +36,16 @@ export function Navbar() {
         MuxPay
       </Link>
 
-      <div className={styles.links}>
-        {isConnected && (
-          <Link href="/dashboard" className={styles.link}>
-            Dashboard
-          </Link>
-        )}
-        <Link href="/creator/dashboard" className={styles.link}>
-          Creators
-        </Link>
-        <Link href="/business/dashboard" className={styles.link}>
-          Business
-        </Link>
-      </div>
+
 
       <div className={styles.actions}>
+        {isConnected && (
+          <Link href="/dashboard">
+            <Button variant="secondary" style={{ marginRight: '0.5rem' }}>
+              Dashboard
+            </Button>
+          </Link>
+        )}
         <ConnectButton />
       </div>
     </motion.nav>

@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAccount } from "wagmi";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Navbar } from "@/components/layout/Navbar";
@@ -13,15 +10,6 @@ import { motion, Variants } from "framer-motion";
 import { Zap, Globe, ShieldCheck } from "lucide-react";
 
 export default function Home() {
-  const { isConnected } = useAccount();
-  const router = useRouter();
-
-  // Redirect to dashboard when wallet connects
-  useEffect(() => {
-    if (isConnected) {
-      router.push('/dashboard');
-    }
-  }, [isConnected, router]);
 
   const containerVars: Variants = {
     hidden: { opacity: 0 },
