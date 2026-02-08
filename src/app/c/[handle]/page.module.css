@@ -197,6 +197,10 @@
   border-top: 1px solid #e2e8f0;
 }
 
+.flowContainer {
+  color: hsl(var(--foreground));
+}
+
 .statItem {
   display: flex;
   flex-direction: column;

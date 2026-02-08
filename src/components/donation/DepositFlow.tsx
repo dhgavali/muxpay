@@ -20,13 +20,13 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
   const { usdcAddress } = useUSDCAddress();
   const { balance: usdcBalance, refetch: refetchUSDCBalance } = useUSDCBalance(usdcAddress);
   const { allowance, refetch: refetchAllowance } = useUSDCAllowance(usdcAddress);
-  
+
   const { approve, isPending: isApproving, isConfirming: isApprovingConfirming, isSuccess: isApproved, error: approveError } = useApproveUSDC(usdcAddress);
   const { deposit, isPending: isDepositing, isConfirming: isDepositingConfirming, isSuccess: isDeposited, error: depositError } = useVaultDeposit();
-  
+
   const [amount, setAmount] = useState('');
   const [step, setStep] = useState<'approve' | 'deposit'>('approve');
-  
+
   // Track if we've already handled success to prevent infinite callbacks
   const hasHandledApproval = useRef(false);
   const hasHandledDeposit = useRef(false);
@@ -63,15 +63,15 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
     if (isDeposited && !hasHandledDeposit.current) {
       hasHandledDeposit.current = true;
       onSuccess?.('Deposit successful!');
-      
+
       // Refetch balances
       refetchUSDCBalance();
       refetchAllowance();
-      
+
       // Reset form
       setAmount('');
       setStep('approve');
-      
+
       // Auto-advance to tip section after a short delay
       setTimeout(() => {
         onComplete?.();
@@ -112,7 +112,7 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.8)' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'hsl(var(--muted-foreground))' }}>
             Amount to Deposit
           </label>
           <input
@@ -128,14 +128,11 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
               <button
                 key={preset}
                 onClick={() => setAmount(preset.toString())}
+                className={styles.tipButton}
                 style={{
                   flex: 1,
                   padding: '0.5rem',
-                  background: 'rgba(123, 63, 242, 0.2)',
-                  border: '1px solid rgba(123, 63, 242, 0.4)',
-                  borderRadius: '6px',
-                  color: '#fff',
-                  cursor: 'pointer',
+                  fontSize: '0.9rem'
                 }}
               >
                 ${preset}
@@ -146,7 +143,7 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
 
         {needsApproval ? (
           <div>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+            <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.9rem', marginBottom: '1rem' }}>
               Step 1/2: Approve USDC spending
             </p>
             <Button
@@ -159,7 +156,7 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
           </div>
         ) : (
           <div>
-            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+            <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.9rem', marginBottom: '1rem' }}>
               Step 2/2: Deposit to Vault
             </p>
             <Button
@@ -167,10 +164,10 @@ export function DepositFlow({ onError, onSuccess, onComplete }: DepositFlowProps
               disabled={!amount || amountNum <= 0 || isDepositing || isDepositingConfirming}
               className={styles.actionButton}
             >
-              {isDepositing || isDepositingConfirming 
-                ? 'Depositing...' 
-                : isDeposited 
-                  ? '✅ Deposited!' 
+              {isDepositing || isDepositingConfirming
+                ? 'Depositing...'
+                : isDeposited
+                  ? '✅ Deposited!'
                   : `Deposit $${amountNum.toFixed(2)} USDC`
               }
             </Button>

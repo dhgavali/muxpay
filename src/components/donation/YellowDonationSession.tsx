@@ -17,32 +17,32 @@ interface YellowDonationSessionProps {
   onSuccess?: (message: string) => void;
 }
 
-export function YellowDonationSession({ 
-  creatorHandle, 
-  creatorAddress, 
-  onError, 
-  onSuccess 
+export function YellowDonationSession({
+  creatorHandle,
+  creatorAddress,
+  onError,
+  onSuccess
 }: YellowDonationSessionProps) {
   const { address } = useAccount();
   const { balance, refetch: refetchBalance } = useVaultBalance();
   const { nonce: userNonce } = useUserNonce();
   const { signTypedDataAsync } = useSignTypedData();
-  
+
   // Yellow hook for off-chain UX
-  const { 
-    isConnected: isYellowConnected, 
-    isConnecting, 
+  const {
+    isConnected: isYellowConnected,
+    isConnecting,
     error: yellowError,
     connect,
     startSession: startYellowSession,
     sendTip: sendYellowTip,
     endSession: endYellowSession
   } = useYellow();
-  
+
   // Backend hooks for actual settlement
   const sendTipMutation = useSendTip();
   const settleSessionMutation = useSettleSession();
-  
+
   const [customAmount, setCustomAmount] = useState('');
   const [isStartingSession, setIsStartingSession] = useState(false);
   const [isSending, setIsSending] = useState(false);
@@ -85,7 +85,7 @@ export function YellowDonationSession({
       } catch (yellowErr) {
         console.warn('Yellow connection failed, continuing with backend-only mode:', yellowErr);
       }
-      
+
       setIsSessionActive(true);
       onSuccess?.('🟢 Session started! Send instant tips.');
     } catch (err: any) {
@@ -188,7 +188,7 @@ export function YellowDonationSession({
       setTotalTipped(0);
       setCurrentNonce(prev => prev + 1);
       refetchBalance();
-      
+
       onSuccess?.(`✅ Settled $${totalTipped.toFixed(2)} on-chain! Tx: ${result.txHash?.slice(0, 10)}...`);
     } catch (err: any) {
       onError?.(err.message || 'Settlement failed');
@@ -240,8 +240,8 @@ export function YellowDonationSession({
             className={styles.actionButton}
             style={{ marginTop: '1rem' }}
           >
-            {isStartingSession || isConnecting 
-              ? '🔄 Starting Session...' 
+            {isStartingSession || isConnecting
+              ? '🔄 Starting Session...'
               : '⚡ Start Tipping Session'}
           </Button>
         )}
@@ -250,7 +250,7 @@ export function YellowDonationSession({
         {isSessionActive && (
           <>
             <div style={{ marginTop: '1.5rem' }}>
-              <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.5rem' }}>
+              <p style={{ color: 'hsl(var(--muted-foreground))', marginBottom: '0.5rem' }}>
                 Quick Tip to @{creatorHandle}:
               </p>
               <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
@@ -275,9 +275,9 @@ export function YellowDonationSession({
               variant={totalTipped > 0 ? 'primary' : 'ghost'}
               style={{ width: '100%', marginTop: '1rem' }}
             >
-              {isSettling 
-                ? '⏳ Settling on-chain...' 
-                : totalTipped > 0 
+              {isSettling
+                ? '⏳ Settling on-chain...'
+                : totalTipped > 0
                   ? `🔒 Settle $${totalTipped.toFixed(2)} On-Chain`
                   : 'End Session'}
             </Button>
@@ -285,10 +285,10 @@ export function YellowDonationSession({
         )}
 
         {/* Branding */}
-        <p style={{ 
-          marginTop: '1.5rem', 
-          fontSize: '0.75rem', 
-          color: 'rgba(255,255,255,0.5)',
+        <p style={{
+          marginTop: '1.5rem',
+          fontSize: '0.75rem',
+          color: 'hsl(var(--muted-foreground))',
           textAlign: 'center'
         }}>
           Powered by Yellow Network • Nitrolite Protocol
